@@ -105,6 +105,8 @@ class App extends React.Component {
     const arr = this.props.finalvalue;
     // console.log(arr)
     const intentionsarr = this.props.intentions
+
+    console.log(this.props.validators.indexOf(this.props.lastAuthor))
     // const validatortext = "Validators: " + this.props.validators.length + "/" + this.props.totalvalidators
     // const arr1 = [1,2,3,4,5,6,7,8]
     return (

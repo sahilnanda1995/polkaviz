@@ -2,6 +2,7 @@ import React from "react";
 import Relay from "./Relay";
 import { Stage, Layer } from "react-konva";
 import Validator from "./Validator";
+import BlockAnimation from "./alexander/BlockAnimation";
 import BlockAnimationNew from "./kusama/BlockAnimation-new";
 import { withRouter } from "react-router-dom";
 
@@ -99,7 +100,7 @@ class MainWrapper extends React.Component {
                 {/* {console.log(this.props.bottombarobject.finalblock)}
               {console.log(this.props.previousBlock)} */}
                 {this.props.previousBlock !== undefined && (
-                  <BlockAnimationNew
+                  <BlockAnimation
                     key={this.props.validators.indexOf(this.props.lastAuthor)}
                     angle={
                       180 -

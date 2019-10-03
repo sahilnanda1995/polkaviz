@@ -87,12 +87,12 @@ class Router extends React.Component {
   let provider = new WsProvider("wss://kusama-rpc.polkadot.io");
   const apinew = await ApiPromise.create({ provider });
   
-  // const intentions = await apinew.query.staking.validators()
-  // console.log(JSON.parse(JSON.stringify(intentions)))
+  const intentions = await apinew.query.staking.validators()
+  console.log(JSON.parse(JSON.stringify(intentions)))
   
-  // this.setState({
-  //   intentions: JSON.parse(JSON.stringify(intentions))
-  // })
+  this.setState({
+    intentions: JSON.parse(JSON.stringify(intentions))
+  })
 
     await apinew.derive.chain.subscribeNewHeads(block => {
       // console.log(`block #${block.author}`);
