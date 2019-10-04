@@ -52,18 +52,23 @@ class MainWrapper extends React.Component {
   )}
 
   render() {
-    const arr = this.props.valtotalinfo;
-    const arr2 = this.props.kuvaltotalinfo;
+    const arr = this.props.validators;
+    const arr2 = this.props.kuvalidators;
     // const validatortext = "Validators: " + this.props.validators.length + "/" + this.props.totalvalidators
     // const arr1 = [1,2,3,4,5,6,7,8]
     return (
       // this.props.isloading ? (<React.Fragment><div className="lds-ripple"><div></div><div></div></div><div className="lds-text">Waiting for API to be connected.....</div></React.Fragment>) :
       // (
+        <div>
+          <div className="mainwrapper-text">
+            <h1>Polkaviz</h1>
+            <h2>Visualization efforts on Polkadot Network</h2>
+          </div>
       <div className="mainWrapper">
         
         <div className="container">
-          <div className="heading">
-            <h2>Polkadot Network</h2>
+          <div className="headingmainwrapper1">
+            <h2>Alexander Network</h2>
           </div>
           <div className="relay-circle">
             <Stage width={window.innerWidth/2} height={window.innerHeight} onClick={this.alexanderClick} onMouseOver={this.handleOnMouseOver} onMouseOut={this.handleOnMouseOut} >
@@ -74,8 +79,8 @@ class MainWrapper extends React.Component {
                 {arr.map((person, index) => (
                   <Validator
                     key={index}
-                    validatorAddress={this.props.valtotalinfo[index].valname}
-                    valinfo={this.props.valtotalinfo[index].valinfo}
+                    // validatorAddress={this.props.valtotalinfo[index].valname}
+                    // valinfo={this.props.valtotalinfo[index].valinfo}
                     totalinfo={this.props.valtotalinfo}
                     nominatorinfo={this.props.nominatorinfo}
                     angle={180 - (index * 360) / arr.length}
@@ -88,7 +93,7 @@ class MainWrapper extends React.Component {
                         )
                     }
                     y={
-                      window.innerHeight +
+                      window.innerHeight -200 +
                       360 *
                         Math.sin(
                           (90 - 1 - (index * 360) / arr.length) * 0.0174533
@@ -122,7 +127,7 @@ class MainWrapper extends React.Component {
                         )
                     }
                     y1={
-                      window.innerHeight / 2 +
+                      window.innerHeight / 2  - 100 +
                       100 *
                         Math.sin(
                           (90 -
@@ -148,7 +153,7 @@ class MainWrapper extends React.Component {
                         )
                     }
                     y2={
-                      window.innerHeight / 2 +
+                      window.innerHeight / 2 -100 +
                       160 *
                         Math.sin(
                           (90 -
@@ -162,7 +167,7 @@ class MainWrapper extends React.Component {
                     }
                   />
                 )}
-                <Relay x={window.innerWidth/2} y={window.innerHeight} />
+                <Relay x={window.innerWidth/2} y={window.innerHeight - 200} />
               </Layer>
             </Stage>
           </div>
@@ -176,14 +181,10 @@ class MainWrapper extends React.Component {
           </div> */}
         </div>
         <div className="right-stage">
-          {/* <p>HI i am shaurya</p>
-          <Stage width={window.innerWidth/2} height={window.innerHeight} x={700}>
-          <Layer>
-            <Rect x={700} y={0} width={100} height={100} fill={"#9335A3"}/>
-          </Layer>
-        </Stage>
-         */}
-         <Stage width={window.innerWidth/2} height={window.innerHeight} onClick={this.kusamaClick} onMouseOver={this.handleOnMouseOver} onMouseOut={this.handleOnMouseOut} >
+        <div className="headingmainwrapper2">
+            <h2>Kusama Network</h2>
+          </div>
+         <Stage width={window.innerWidth/2} height={window.innerHeight - 200} onClick={this.kusamaClick} onMouseOver={this.handleOnMouseOver} onMouseOut={this.handleOnMouseOut} >
               
               <Layer>
                 {/* <Parachains x={window.innerWidth} y={window.innerHeight} parachains={arr1}/> */}
@@ -191,8 +192,8 @@ class MainWrapper extends React.Component {
                 {arr2.map((person, index) => (
                   <Validator
                     key={index}
-                    validatorAddress={this.props.kuvaltotalinfo[index].valname}
-                    valinfo={this.props.kuvaltotalinfo[index].valinfo}
+                    // validatorAddress={this.props.kuvaltotalinfo[index].valname}
+                    // valinfo={this.props.kuvaltotalinfo[index].valinfo}
                     totalinfo={this.props.kuvaltotalinfo}
                     nominatorinfo={this.props.kunominatorinfo}
                     angle={180 - (index * 360) / arr2.length}
@@ -205,7 +206,7 @@ class MainWrapper extends React.Component {
                         )
                     }
                     y={
-                      window.innerHeight +
+                      window.innerHeight - 200 +
                       360 *
                         Math.sin(
                           (90 - 1 - (index * 360) / arr2.length) * 0.0174533
@@ -239,7 +240,7 @@ class MainWrapper extends React.Component {
                         )
                     }
                     y1={
-                      window.innerHeight / 2 +
+                      window.innerHeight / 2 -100 +
                       100 *
                         Math.sin(
                           (90 -
@@ -265,7 +266,7 @@ class MainWrapper extends React.Component {
                         )
                     }
                     y2={
-                      window.innerHeight / 2 +
+                      window.innerHeight / 2 -100 +
                       160 *
                         Math.sin(
                           (90 -
@@ -279,10 +280,11 @@ class MainWrapper extends React.Component {
                     }
                   />
                 )}
-                <Relay x={window.innerWidth/2} y={window.innerHeight} isKusama={true}/>
+                <Relay x={window.innerWidth/2} y={window.innerHeight-200} isKusama={true}/>
               </Layer>
             </Stage>
           </div>
+        </div>
         </div>
       // )
     );

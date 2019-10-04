@@ -105,12 +105,13 @@ class App extends React.Component {
     const arr = this.props.finalvalue;
     // console.log(arr)
     const intentionsarr = this.props.intentions
+    console.log(this.props.finalvalue)
 
     console.log(this.props.validators.indexOf(this.props.lastAuthor))
     // const validatortext = "Validators: " + this.props.validators.length + "/" + this.props.totalvalidators
     // const arr1 = [1,2,3,4,5,6,7,8]
     return (
-      // this.props.isloading ? (<React.Fragment><div className="lds-ripple"><div></div><div></div></div><div className="lds-text">Waiting for API to be connected.....</div></React.Fragment>) : 
+      this.props.finalvalue.length === 0 ? (<React.Fragment><div className="lds-ripple"><div></div><div></div></div></React.Fragment>) : 
       // (
       <div className="container">
 

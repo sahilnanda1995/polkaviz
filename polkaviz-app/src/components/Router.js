@@ -5,7 +5,7 @@ import NominatorApp from "./alexander/nominator_components/NominatorApp";
 import { Route, Switch, HashRouter } from "react-router-dom";
 import { WsProvider, ApiPromise } from "@polkadot/api";
 import MainWrapper from "./MainWrapper";
-import KusamaApp from './kusama/KusamaApp'
+import KusamaApp from "./kusama/KusamaApp";
 class Router extends React.Component {
   constructor() {
     super();
@@ -26,8 +26,8 @@ class Router extends React.Component {
       finalblock: 0,
       previousBlock: undefined,
       nominatorinfo: [],
-      intentions:[],
-      finalvalue:[],
+      intentions: [],
+      finalvalue: [],
 
       kuvalidators: [],
       kulastAuthor: "",
@@ -51,7 +51,7 @@ class Router extends React.Component {
   }
   componentDidMount() {
     // console.log(this.props)
-    
+
     this.createApi();
     this.createApi2();
     this.interval = setInterval(() => {
@@ -82,23 +82,21 @@ class Router extends React.Component {
   }
 
   async createApi2() {
+    let provider = new WsProvider("wss://kusama-rpc.polkadot.io");
+    const apinew = await ApiPromise.create({ provider });
 
+    // const intentions = await apinew.query.staking.validators()
+    // console.log(JSON.parse(JSON.stringify(intentions)))
 
-  let provider = new WsProvider("wss://kusama-rpc.polkadot.io");
-  const apinew = await ApiPromise.create({ provider });
-  
-  const intentions = await apinew.query.staking.validators()
-  console.log(JSON.parse(JSON.stringify(intentions)))
-  
-  this.setState({
-    intentions: JSON.parse(JSON.stringify(intentions))
-  })
+    // this.setState({
+    //   intentions: JSON.parse(JSON.stringify(intentions))
+    // })
 
     await apinew.derive.chain.subscribeNewHeads(block => {
       // console.log(`block #${block.author}`);
       const lastAuthor = block.author.toString();
       if (this.ismounted) {
-        this.setState({ kulastAuthor: lastAuthor});
+        this.setState({ kulastAuthor: lastAuthor });
       }
       const start = new Date();
       const blockNumber = block.number.toString();
@@ -117,19 +115,11 @@ class Router extends React.Component {
       // console.log(sessionValidators)
       if (this.ismounted) {
         this.setState({
-          kuvalidators: sessionValidators
+          kuvalidators: sessionValidators,
+          kuisloading:false
         });
       }
     });
-
-
-    let totalValidators = await apinew.query.staking.validatorCount();
-    // console.log("this", totalValidators.words["0"], totalValidators);
-    if (this.ismounted) {
-      this.setState({
-        kutotalValidators: totalValidators.words["0"]
-      });
-    }
 
     const start = async () => {
       let arr1 = [];
@@ -161,6 +151,13 @@ class Router extends React.Component {
           // () => this.getnominators2()
         );
       }
+      let totalValidators = await apinew.query.staking.validatorCount();
+      // console.log("this", totalValidators.words["0"], totalValidators);
+      if (this.ismounted) {
+        this.setState({
+          kutotalValidators: totalValidators.words["0"]
+        });
+      }
     };
 
     start();
@@ -177,19 +174,19 @@ class Router extends React.Component {
       const sessionProgress = header.sessionProgress.toString();
       // console.log(eraLength,eraProgress,sessionLength,sessionProgress)
       if (this.ismounted) {
-        this.setState({
-          kubottombarinfo: {
-            eraLength: eraLength,
-            eraProgress: eraProgress,
-            sessionLength: sessionLength,
-            sessionProgress: sessionProgress
+        this.setState(
+          {
+            kubottombarinfo: {
+              eraLength: eraLength,
+              eraProgress: eraProgress,
+              sessionLength: sessionLength,
+              sessionProgress: sessionProgress
+            }
           }
-        },
-        // () => this.createApi()
+          // () => this.createApi()
         );
       }
     });
-
   }
 
   // getnominators2 = async () => {
@@ -247,19 +244,11 @@ class Router extends React.Component {
       // console.log(sessionValidators)
       if (this.ismounted) {
         this.setState({
-          validators: sessionValidators
+          validators: sessionValidators,
+          isloading: false
         });
       }
     });
-
-
-    let totalValidators = await api.query.staking.validatorCount();
-    // console.log("this", totalValidators.words["0"], totalValidators);
-    if (this.ismounted) {
-      this.setState({
-        totalValidators: totalValidators.words["0"]
-      });
-    }
 
     const start = async () => {
       let arr1 = [];
@@ -275,49 +264,52 @@ class Router extends React.Component {
         };
       });
 
+      let totalValidators = await api.query.staking.validatorCount();
+      // console.log("this", totalValidators.words["0"], totalValidators);
+      if (this.ismounted) {
+        this.setState({
+          totalValidators: totalValidators.words["0"]
+        });
+      }
 
+      const intentions = await api.query.staking.validators();
+      console.log(JSON.parse(JSON.stringify(intentions)));
+      const allvals = JSON.parse(JSON.stringify(intentions))[0];
+      console.log(allvals);
+      // allvals.forEach(ele => {
+      //   this.state.validators.forEach(val => {
 
-
-const intentions = await api.query.staking.validators()
-console.log(JSON.parse(JSON.stringify(intentions)))
-const allvals = JSON.parse(JSON.stringify(intentions))[0]
-console.log(allvals)
-// allvals.forEach(ele => {
-//   this.state.validators.forEach(val => {
-    
-//   })
-// })
-const arr2 = arr1.map(ele => ele.valname)
-console.log(this.state.validators)
-const arr3 = allvals.filter(e => !arr2.includes(e))
-console.log(arr3)
-const intentionstotalinfo = await Promise.all(
-  arr3.map(val => api.derive.staking.info(val))
-);
-const arr4 = JSON.parse(JSON.stringify(intentionstotalinfo)).map(info => {
-  return {
-    valname: info.accountId,
-    valinfo: info
-  };
-});
-// let arr5 = this.state.validators.push(arr4);
-let arr5 = [...arr1,...arr4]
-console.log(arr4,arr5)
-// this.setState({
-//   finalvalue:arr5
-// })
-// const ans = await api.derive.staking.info("DdFp1EWazfocKdYuCinGyNCPAQRYr6LDkwURG7k9vQg51WS")
-// console.log(JSON.parse(JSON.stringify(ans)))
-
+      //   })
+      // })
+      const arr2 = arr1.map(ele => ele.valname);
+      console.log(this.state.validators);
+      const arr3 = allvals.filter(e => !arr2.includes(e));
+      console.log(arr3);
+      const intentionstotalinfo = await Promise.all(
+        arr3.map(val => api.derive.staking.info(val))
+      );
+      const arr4 = JSON.parse(JSON.stringify(intentionstotalinfo)).map(info => {
+        return {
+          valname: info.accountId,
+          valinfo: info
+        };
+      });
+      // let arr5 = this.state.validators.push(arr4);
+      let arr5 = [...arr1, ...arr4];
+      console.log(arr4, arr5);
+      // this.setState({
+      //   finalvalue:arr5
+      // })
+      // const ans = await api.derive.staking.info("DdFp1EWazfocKdYuCinGyNCPAQRYr6LDkwURG7k9vQg51WS")
+      // console.log(JSON.parse(JSON.stringify(ans)))
 
       if (this.ismounted) {
         // console.log("arr1",arr1)
         this.setState(
           {
-            finalvalue:arr5,
+            finalvalue: arr5,
             valtotalinfo: arr1,
-            intentions: arr3,
-            isloading: false
+            intentions: arr3
           },
           () => getnominators()
         );
@@ -356,31 +348,28 @@ console.log(arr4,arr5)
           arr.push(nom.who);
         });
       });
-  
+
       // console.log("here are unfiltered", arr);
       function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
       }
-  
+
       let nominators = arr.filter(onlyUnique);
       // console.log("total", nominators);
-  
+
       const nominatorstotalinfo = await Promise.all(
         nominators.map(val => api.derive.staking.info(val))
       );
-  
+
       let arr2 = JSON.parse(JSON.stringify(nominatorstotalinfo));
-      if(this.ismounted){
-      this.setState({
-        nominatorinfo: arr2
-      });
-    }
+      if (this.ismounted) {
+        this.setState({
+          nominatorinfo: arr2
+        });
+      }
       // console.log(arr2)
     };
-
   }
-
-  
 
   componentWillUnmount() {
     this.ismounted = false;
@@ -388,11 +377,10 @@ console.log(arr4,arr5)
   }
 
   render() {
-    
     // console.count("hi")
-    let loadingdone = false
-    if(!this.state.isloading && !this.state.kuisloading){
-      loadingdone = true
+    let loadingdone = false;
+    if (!this.state.isloading && !this.state.kuisloading) {
+      loadingdone = true;
     }
     // console.table(this.state.isloading,this.state.kuisloading,loadingdone)
     let bottombarobject = {

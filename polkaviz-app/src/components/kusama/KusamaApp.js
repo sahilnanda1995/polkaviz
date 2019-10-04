@@ -111,10 +111,10 @@ class KusamaApp extends React.Component {
       // this.props.isloading ? (<React.Fragment><div className="lds-ripple"><div></div><div></div></div><div className="lds-text">Waiting for API to be connected.....</div></React.Fragment>) : 
       // (
 
-      <div className="container">
+      <div className="kusamacontainer">
 
         <div className="heading">
-          <h2>Polkadot Network</h2>
+          <h2>Kusama Network</h2>
         </div>
 
         <div className="intentions">
