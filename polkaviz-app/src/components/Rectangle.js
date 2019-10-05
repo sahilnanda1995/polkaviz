@@ -1,7 +1,5 @@
 import React from "react";
-// import ReactDOM from 'react-dom';
 import { Rect, Text} from "react-konva";
-// import {BrowserRouter as Route,Link} from 'react-router-dom'
 
 class Rectangle extends React.Component {
   constructor(props) {
@@ -9,8 +7,6 @@ class Rectangle extends React.Component {
     this.state = { showValidatorAddress: false };
   }
   
-  componentDidMount() {
-  }
 
   handleOnMouseOver = (e) => {
     e.target.setAttrs({
@@ -30,23 +26,25 @@ class Rectangle extends React.Component {
   }
   handleClick = () => {
     document.body.style.cursor = "default";
+    if(!this.props.isKusama){
     this.props.history.push({
       pathname:"/alexander/validator/"+ this.props.validatorAddress,
       state:{totalinfo:this.props.totalinfo,
       valinfo:this.props.valinfo,
       // nominatorinfo:this.props.nominatorinfo
     }
-}
+  }
   )}
-
+  }
   render() {
     let x1 = this.props.x
     let y1 = this.props.y
     // let x2 = this.props.x/
-    let valtext = ""
-    if(!this.props.isMainWrapper){
+    let valtext = "fetching validator information"
+    if(!this.props.isMainWrapper && this.props.intentions.length !== 0){
     valtext = "accountId: " + this.props.validatorAddress.toString().slice(0,8) + "......" + this.props.validatorAddress.toString().slice(-8)
     // console.log(this.props.angle)
+    }
     if(this.props.angle<=45 && this.props.angle>=0){
       x1 = this.props.x + 50
       y1 = this.props.y - 80
@@ -71,7 +69,7 @@ class Rectangle extends React.Component {
       x1 = this.props.x + 50
       y1 = this.props.y 
     }
-  }
+  
   // if(this.props.intentions.includes(this.props.validatorAddress)){
 
   // }
@@ -88,7 +86,7 @@ class Rectangle extends React.Component {
         rotation={this.props.angle}
         onMouseOver={!this.props.isMainWrapper ? this.handleOnMouseOver : undefined}
         onMouseOut={!this.props.isMainWrapper ? this.handleOnMouseOut : undefined}
-        onClick={!this.props.isMainWrapper && !this.props.isKusama ? this.handleClick : undefined}
+        onClick={!this.props.isMainWrapper ? this.handleClick : undefined}
       />
 
         {this.state.showValidatorAddress && !this.props.isMainWrapper &&
@@ -98,7 +96,7 @@ class Rectangle extends React.Component {
         width={260}
         height={110}
         cornerRadius={4.69457}
-        fill={this.props.color}
+        fill={"#333333"}
         shadowOffsetY={10}
         shadowBlur={10}
         shadowColor="black"

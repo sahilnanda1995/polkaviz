@@ -317,3 +317,13 @@ body {
   left: 1392px;
   top: 820px;
 }
+.kusamaconnecting{
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 28px;
+  color: #ffffff; 
+  margin-top:45%;
+  margin-left:10%;
+}

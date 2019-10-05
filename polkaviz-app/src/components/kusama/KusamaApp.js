@@ -3,10 +3,8 @@ import Relay from "../Relay";
 import { Stage, Layer } from "react-konva";
 import Validator from "../Validator";
 import BlockAnimationNew from "./BlockAnimation-new";
-// import { WsProvider, ApiPromise } from "@polkadot/api";
 import Bottombar from "../Bottombar";
 import { withRouter } from 'react-router-dom';
-// import Parachains from './Parachains'
 
 class KusamaApp extends React.Component {
   // constructor() {
@@ -143,6 +141,7 @@ class KusamaApp extends React.Component {
                   nominatorinfo={this.props.nominatorinfo}
                   angle={180 - (index * 360) / arr.length}
                   history={this.props.history}
+                  intentions={intentionsarr}
                   x={
                     window.innerWidth +
                     360 *

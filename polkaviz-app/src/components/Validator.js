@@ -5,53 +5,11 @@ import Tail from "./Tail";
 
 class Validator extends React.Component {
   
-
-  
-  // constructor(){
-  //   super()
-  //   this.state={
-  //     nominators:[],
-  //     totalnominators:0,
-  //   }
-  // }
-  // // componentDidMount(){
-  // //   this.createApi()
-  // // }
-  // // async createApi() {
-  // //   const provider = new WsProvider("wss://poc3-rpc.polkadot.io");
-  // //   const api = await ApiPromise.create(provider);
-
-  // //   const stakers = await api.derive.staking.info(this.props.validatorAddress);
-  // //   // 5FbuxWQuCd3N9kosfTXY1v63xV5bNfSpNutuRvERAWm6fmzt
-  // //   // console.log(JSON.stringify(stakers));
-  // //   const value = JSON.parse(stakers);
-  // //   this.totalvalue = value.stakers.total / Math.pow(10,15)
-  // //   this.ownvalue = value.stakers.own /Math.pow(10,15)
-  // //   if(value.stashId===value.controllerId)
-  // //   {
-  // //     if(this.ismounted){
-  // //       this.setState({
-  // //           showdifferent:false
-  // //       })
-  // //     }
-  // //   }
-  // //   if(this.ismounted){
-  // //   this.setState({
-  // //     nominators: value.stakers.others,
-  // //     totalnominators: value.stakers.others.length,
-  // //     datafetched:true
-  // //   });
-  // // }
-  // //   // console.log(value.stakers.others.length);
-  // // }
-  // componentWillUnmount(){
-  //   this.ismounted = false;
-  // }
   render() {
     let bondvalue = ""
     let nomvalue = 0
 
-    if(!this.props.isMainWrapper && !this.props.isKusama){
+    if(!this.props.isMainWrapper && !this.props.isKusama && this.props.intentions.length !== 0 ){
     let totalvalue = this.props.valinfo.stakers.total / Math.pow(10,15)
     let ownvalue = this.props.valinfo.stakers.own /Math.pow(10,15)
     let totalbonded = 0

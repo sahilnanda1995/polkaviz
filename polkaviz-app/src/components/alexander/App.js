@@ -13,16 +13,18 @@ class App extends React.Component {
     return this.props.lastAuthor !== nextProps.lastAuthor || this.props.bottombarobject !== nextProps.bottombarobject
 }
   render() {
-    const arr = this.props.finalvalue;
-    // console.log(arr)
+    let arr = this.props.validators;
+    if(this.props.validatorsandintentions.length !== 0 ){
+    arr = this.props.validatorsandintentions;
+        }    // console.log(arr)
     const intentionsarr = this.props.intentions
-    console.log(this.props.finalvalue)
-    console.log(this.props.lastAuthor,this.props.validators,this.props.valtotalinfo)
-    console.log(this.props.validators.indexOf(this.props.lastAuthor))
+    console.log(this.props.validatorsandintentions)
+    // console.log(this.props.lastAuthor,this.props.validators,this.props.valtotalinfo)
+    // console.log(this.props.validators.indexOf(this.props.lastAuthor))
     // const validatortext = "Validators: " + this.props.validators.length + "/" + this.props.totalvalidators
     // const arr1 = [1,2,3,4,5,6,7,8]
     return (
-      this.props.finalvalue.length === 0 ? (<React.Fragment><div className="lds-ripple"><div></div><div></div></div></React.Fragment>) : 
+      // this.props.validatorsandintentions.length === 0 ? (<React.Fragment><div className="lds-ripple"><div></div><div></div></div></React.Fragment>) : 
       // (
       <div className="container">
 
@@ -52,10 +54,10 @@ class App extends React.Component {
               {arr.map((person, index) => (
                 <Validator
                   key={index}
-                  validatorAddress={person.valname}
-                  valinfo={person.valinfo}
-                  totalinfo={this.props.valtotalinfo}
-                  nominatorinfo={this.props.nominatorinfo}
+                  validatorAddress={this.props.validatorsandintentions ? person.valname : undefined}
+                  valinfo={this.props.validatorsandintentions ? person.valinfo : undefined}
+                  totalinfo={this.props.validatorsandintentions ? this.props.valtotalinfo : undefined}
+                  nominatorinfo={this.props.validatorsandintentions ? this.props.nominatorinfo : undefined}
                   angle={180 - (index * 360) / arr.length}
                   history={this.props.history}
                   intentions={this.props.intentions}

@@ -53,7 +53,7 @@ class MainWrapper extends React.Component {
 
   render() {
     const arr = this.props.validators;
-    const arr2 = this.props.kuvalidators;
+    const arr2 = this.props.kusamavalidators;
     // const validatortext = "Validators: " + this.props.validators.length + "/" + this.props.totalvalidators
     // const arr1 = [1,2,3,4,5,6,7,8]
     return (
@@ -71,6 +71,7 @@ class MainWrapper extends React.Component {
             <h2>Alexander Network</h2>
           </div>
           <div className="relay-circle">
+            {this.props.isloading ? <p className="alexanderconnecting">Please wait while we connect to alexander network</p>:
             <Stage width={window.innerWidth/2} height={window.innerHeight} onClick={this.alexanderClick} onMouseOver={this.handleOnMouseOver} onMouseOut={this.handleOnMouseOut} >
               
               <Layer>
@@ -170,6 +171,7 @@ class MainWrapper extends React.Component {
                 <Relay x={window.innerWidth/2} y={window.innerHeight - 200} />
               </Layer>
             </Stage>
+            }
           </div>
           {/* <div className="bottombar">
             <Bottombar
@@ -181,11 +183,12 @@ class MainWrapper extends React.Component {
           </div> */}
         </div>
         <div className="right-stage">
+        {this.props.kusamaisloading ? <p className="kusamaconnecting">Please Wait while we connect to Kusama Network</p>:
+        <React.Fragment>
         <div className="headingmainwrapper2">
             <h2>Kusama Network</h2>
           </div>
          <Stage width={window.innerWidth/2} height={window.innerHeight - 200} onClick={this.kusamaClick} onMouseOver={this.handleOnMouseOver} onMouseOut={this.handleOnMouseOut} >
-              
               <Layer>
                 {/* <Parachains x={window.innerWidth} y={window.innerHeight} parachains={arr1}/> */}
                 {/*in  (90 - 1) "-1"  is to handle the deviation of hexagon wrt to validators */}
@@ -283,6 +286,8 @@ class MainWrapper extends React.Component {
                 <Relay x={window.innerWidth/2} y={window.innerHeight-200} isKusama={true}/>
               </Layer>
             </Stage>
+            </React.Fragment>
+        }
           </div>
         </div>
         </div>

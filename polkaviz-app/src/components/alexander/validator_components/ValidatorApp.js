@@ -12,7 +12,6 @@ class ValidatorApp extends React.Component {
       validator: "",
       nominators: [],
       showValidatorAddress: false,
-      showdifferent: true,
       stash: "",
       controller: "",
       isloading: true,
@@ -28,39 +27,80 @@ class ValidatorApp extends React.Component {
   componentDidMount() {
     this.ismounted = true;
     // console.log("val",this.props)
-    this.createApi();
+    // this.createApi();
     // console.log("this",this.props.match.params.validatorAddress);
   }
 
-  async createApi() {
-    let value = "";
-    this.props.valtotalinfo.forEach(ele => {
-      if (
-        ele.valinfo.accountId.toString() ===
-        this.props.match.params.validatorAddress.toString()
-      ) {
-        value = ele.valinfo;
-      }
-    });
-    //  console.log("huyi",value)
-    let totalinfo = this.props.valtotalinfo;
-    this.totalvalue = value.stakers.total / Math.pow(10, 15);
-    this.ownvalue = value.stakers.own / Math.pow(10, 15);
-    if (value.stashId === value.controllerId) {
-      this.setState({
-        showdifferent: false
-      });
-    }
-    this.setState({
-      validator: value.accountId,
-      nominators: value.stakers.others,
-      stash: value.stashId,
-      controller: value.controllerId,
-      isloading: false,
-      valinfo: value,
-      totalinfo: totalinfo
-    });
-  }
+  // async createApi() {
+  //   let value = "";
+  //   console.log(this.props.validatorsandintentions)
+  //   this.props.validatorsandintentions.forEach(ele => {
+  //     console.log(ele)
+  //     if (
+  //       ele.valinfo.accountId.toString() ===
+  //       this.props.match.params.validatorAddress.toString()
+  //     ) {
+  //       value = ele.valinfo;
+  //     }
+  //   });
+  //   console.log("huyi",value)
+  //   let totalinfo = this.props.valtotalinfo;
+  //   console.log(this.props.intentions,this.props.match.params.validatorAddress,this.props.intentions.includes(this.props.match.params.validatorAddress.toString()));
+  //   if(this.props.intentions.length !== 0 && !this.props.intentions.includes(this.props.match.params.validatorAddress)){
+  //   this.totalvalue = value.stakers.total / Math.pow(10, 15);
+  //   this.ownvalue = value.stakers.own / Math.pow(10, 15);
+  //   this.setState({
+  //     nominators: value.stakers.others
+  //   })
+  //   }
+  //   this.setState({
+  //     validator: value.accountId,
+  //     stash: value.stashId,
+  //     controller: value.controllerId,
+  //     isloading: false,
+  //     valinfo: value,
+  //     totalinfo: totalinfo
+  //   });
+  
+//   async createApi() {
+//     let value = "";
+//     if(!this.props.validatorandintentionloading){
+//     this.props.valtotalinfo.forEach(ele => {
+//       if (
+//         ele.valinfo.accountId.toString() ===
+//         this.props.match.params.validatorAddress.toString()
+//       ) {
+//         value = ele.valinfo;
+//       }
+//     });
+//     //  console.log("huyi",value)
+//     let totalinfo = this.props.valtotalinfo;
+//     this.totalvalue = value.stakers.total / Math.pow(10, 15);
+//     this.ownvalue = value.stakers.own / Math.pow(10, 15);
+//     if (value.stashId === value.controllerId) {
+//       this.setState({
+//         showdifferent: false
+//       });
+//     }
+//     this.setState({
+//       validator: value.accountId,
+//       nominators: value.stakers.others,
+//       stash: value.stashId,
+//       controller: value.controllerId,
+//       isloading: false,
+//       valinfo: value,
+//       totalinfo: totalinfo
+//     });
+//   }
+// }
+
+
+  // if(this.props.intentions.length !== 0 && !this.props.intentions.includes(this.props.match.params.validatorAddress)){
+  // {
+  // this.setState({
+  //   isloading:false
+  // })
+  // }
 
   handleOnMouseOver = () => {
     this.setState({ showValidatorAddress: true });
@@ -102,11 +142,41 @@ class ValidatorApp extends React.Component {
     const height = window.innerHeight;
     let radius = 120;
 
+
+    let value = "";
+    let validator = "";
+    let nominators = "";
+    // let stash = "";
+    // let controller = "";
+    let valinfo ="";
+    let totalinfo = "";
+    if(!this.props.validatorandintentionloading){
+    this.props.validatorsandintentions.forEach(ele => {
+      if (
+        ele.valinfo.accountId.toString() ===
+        this.props.match.params.validatorAddress.toString()
+      ) {
+        value = ele.valinfo;
+      }
+    });
+    //  console.log("huyi",value)
+    totalinfo = this.props.valtotalinfo;
+    this.totalvalue = value.stakers.total / Math.pow(10, 15);
+    this.ownvalue = value.stakers.own / Math.pow(10, 15);
+      validator= value.accountId
+      nominators = value.stakers.others
+      // stash = value.stashId
+      // controller = value.controllerId
+      valinfo = value
+  }
+
+
+
     let validatorname =
       "Validator Address: " +
-      this.state.validator.toString().slice(0, 8) +
+      validator.toString().slice(0, 8) +
       "......" +
-      this.state.validator.toString().slice(-8);
+      validator.toString().slice(-8);
 
     let totalbondedtext =
       "total staked: " + this.totalvalue.toFixed(3) + " DOT";
@@ -120,8 +190,14 @@ class ValidatorApp extends React.Component {
     if (this.state.nominators.length > 10) {
       radius = 200;
     }
+    let opacity = 0.3
+    let color = "purple"
+    if(this.props.intentions.includes(this.props.match.params.validatorAddress)){
+      opacity = 0
+      color = "yellow"
+    }
 
-    return this.state.isloading ? (
+    return this.props.validatorandintentionloading ? (
       <React.Fragment>
         <div className="lds-ripple">
           <div></div>
@@ -140,7 +216,7 @@ class ValidatorApp extends React.Component {
         </div>
         <div className="valheading">
           <h2>{validatorname}</h2>
-          <CopyToClipboard text={this.state.validator} onCopy={this.onCopy}>
+          <CopyToClipboard text={validator} onCopy={this.onCopy}>
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -185,14 +261,14 @@ class ValidatorApp extends React.Component {
                      */}
 
             <WhiteCircles
-              n={this.state.nominators.length}
+              n={nominators.length}
               r={radius}
               x={width / 2 + 13}
               y={height / 2 + 6}
-              nominators={this.state.nominators}
+              nominators={nominators}
               history={this.props.history}
-              totalinfo={this.state.totalinfo}
-              valinfo={this.state.valinfo}
+              totalinfo={totalinfo}
+              valinfo={valinfo}
             />
 
             {/* Arc used to create the semicircle on the right, 
@@ -221,7 +297,7 @@ class ValidatorApp extends React.Component {
               ]}
               fill="white"
               stroke="white"
-              opacity={0.3}
+              opacity={opacity}
             />
 
             <Rect
@@ -229,7 +305,7 @@ class ValidatorApp extends React.Component {
               y={height / 2}
               width={26}
               height={12}
-              fill="purple"
+              fill={color}
               cornerRadius={10}
               onMouseOver={this.handleOnMouseOver}
               onMouseOut={this.handleOnMouseOut}

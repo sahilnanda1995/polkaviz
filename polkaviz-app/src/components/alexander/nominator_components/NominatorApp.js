@@ -11,63 +11,54 @@ class NominatorApp extends React.Component {
     super();
     this.latestBlockAuthor = undefined;
     this.state = {
-      validators: [],
-      nominator: [],
-      controllerId: "",
-      valbacked: [],
-      totalbonded: 0,
-      nominatorvalue: {
-        controllerId: 0
-      },
       showValidatorAddress: false,
-      isloading: true,
       copied:false
     };
     this.ismounted = true;
   }
   componentDidMount() {
     // console.log("nom",this.props)
-    this.start();
+    // this.start();
     // this.createApi()
   }
 
-  start() {
-    let arr1 = [];
-    let bonded = 0;
+  // start() {
+  //   let arr1 = [];
+  //   let bonded = 0;
 
-    this.props.valtotalinfo.forEach(ele => {
-      ele.valinfo.stakers.others.forEach(nom => {
-        if (nom.who === this.props.match.params.nominatorAddress) {
-          arr1.push({validator:ele,
-          staked:nom.value / Math.pow(10, 15)});
-          bonded += nom.value / Math.pow(10, 15);
-        }
-      });
-    });
+  //   this.props.valtotalinfo.forEach(ele => {
+  //     ele.valinfo.stakers.others.forEach(nom => {
+  //       if (nom.who === this.props.match.params.nominatorAddress) {
+  //         arr1.push({validator:ele,
+  //         staked:nom.value / Math.pow(10, 15)});
+  //         bonded += nom.value / Math.pow(10, 15);
+  //       }
+  //     });
+  //   });
 
 
-    let nominatorvalue = "";
-    this.props.nominatorinfo.forEach(ele => {
-      if (ele.accountId === this.props.match.params.nominatorAddress) {
-        nominatorvalue = ele.controllerId;
-      }
-    });
+  //   let nominatorvalue = "";
+  //   this.props.nominatorinfo.forEach(ele => {
+  //     if (ele.accountId === this.props.match.params.nominatorAddress) {
+  //       nominatorvalue = ele.controllerId;
+  //     }
+  //   });
 
-    // console.log("Done",nominatorvalue);
-    // console.log(arr1);
-    if (this.ismounted) {
-      this.setState(
-        {
-          valbacked: arr1,
-          totalbonded: bonded,
-          controllerId: nominatorvalue
-        },
-        () => {
-          this.setState({ isloading: false });
-        }
-      );
-    }
-  }
+  //   // console.log("Done",nominatorvalue);
+  //   // console.log(arr1);
+  //   if (this.ismounted) {
+  //     this.setState(
+  //       {
+  //         valbacked: arr1,
+  //         totalbonded: bonded,
+  //         controllerId: nominatorvalue
+  //       },
+  //       () => {
+  //         this.setState({ isloading: false });
+  //       }
+  //     );
+  //   }
+  // }
 
   componentWillUnmount() {
     this.ismounted = false;
@@ -104,6 +95,38 @@ class NominatorApp extends React.Component {
   };
 
   render() {
+
+    let arr1 = [];
+    let bonded = 0;
+    let valbacked = [];
+    let totalbonded = 0;
+    let controllerId = "";
+    if(!this.props.validatorandintentionloading){
+    this.props.valtotalinfo.forEach(ele => {
+      ele.valinfo.stakers.others.forEach(nom => {
+        if (nom.who === this.props.match.params.nominatorAddress) {
+          arr1.push({validator:ele,
+          staked:nom.value / Math.pow(10, 15)});
+          bonded += nom.value / Math.pow(10, 15);
+        }
+      });
+    });
+
+
+    let nominatorvalue = "";
+    this.props.nominatorinfo.forEach(ele => {
+      if (ele.accountId === this.props.match.params.nominatorAddress) {
+        nominatorvalue = ele.controllerId;
+      }
+    });
+
+    // console.log("Done",nominatorvalue);
+    // console.log(arr1);
+          valbacked= arr1
+          totalbonded= bonded
+          controllerId= nominatorvalue
+
+  }
     // console.log("nomvalue",this.state.nominatorvalue)
     let nominatorname =
       "Nominator Address: " +
@@ -112,14 +135,14 @@ class NominatorApp extends React.Component {
       this.props.match.params.nominatorAddress.toString().slice(-8);
     
     let stashname =
-      this.state.controllerId.toString().slice(0, 8) +
+      controllerId.toString().slice(0, 8) +
       "......" +
-      this.state.controllerId.toString().slice(-8);
+      controllerId.toString().slice(-8);
     
       let controllername = "controller: " + stashname;
     
     let bondvalue =
-      "bonded: " + this.state.totalbonded.toString().slice(0, 5) + " DOT";
+      "bonded: " + totalbonded.toString().slice(0, 5) + " DOT";
 
     
     let valtext =
@@ -127,19 +150,16 @@ class NominatorApp extends React.Component {
       "......" +
       this.props.match.params.nominatorAddress.toString().slice(-8);
 
-    let arr = this.state.valbacked;
+    let arr = valbacked;
     const width = window.innerWidth;
     const height = window.innerHeight;
     // console.log("valstate",this.state.showValidatorAddress)
-    return this.state.isloading ? (
+    return this.props.validatorandintentionloading ? (
       <React.Fragment>
         <div className="lds-ripple">
           <div></div>
           <div></div>
         </div>
-        {/* <div className="lds-text" style={{ left: "42%" }}>
-          Fetching Validators.....
-        </div> */}
       </React.Fragment>
     ) : (
       <React.Fragment>
@@ -153,7 +173,7 @@ class NominatorApp extends React.Component {
         </div>
         <div className="valheading">
           <h2>{nominatorname}</h2>
-          <CopyToClipboard text={this.state.validator} onCopy={this.onCopy}>
+          <CopyToClipboard text={this.props.match.params.nominatorAddress} onCopy={this.onCopy}>
             <span>
             <svg
                 xmlns="http://www.w3.org/2000/svg"

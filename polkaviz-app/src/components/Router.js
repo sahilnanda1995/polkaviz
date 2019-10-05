@@ -27,26 +27,27 @@ class Router extends React.Component {
       previousBlock: undefined,
       nominatorinfo: [],
       intentions: [],
-      finalvalue: [],
+      validatorsandintentions: [],
+      validatorandintentionloading : true,
 
-      kuvalidators: [],
-      kulastAuthor: "",
-      kustart: null,
-      kuisloading: true,
-      kuvaltotalinfo: [],
-      kubottombarinfo: {
+      kusamavalidators: [],
+      kusamalastAuthor: "",
+      kusamastart: null,
+      kusamaisloading: true,
+      kusamavaltotalinfo: [],
+      kusamabottombarinfo: {
         eraLength: 0,
         eraProgress: 0,
         sessionLength: 0,
         sessionProgress: 0
       },
-      kutotalValidators: 0,
-      kufinalblock: 0,
-      kupreviousBlock: undefined,
-      kuintentions: []
+      kusamatotalValidators: 0,
+      kusamafinalblock: 0,
+      kusamapreviousBlock: undefined,
+      kusamaintentions: []
     };
     this.elapsed = 0;
-    this.kuelapsed = 0;
+    this.kusamaelapsed = 0;
     this.ismounted = true;
   }
   componentDidMount() {
@@ -58,9 +59,9 @@ class Router extends React.Component {
       // console.log(this.state.elapsed, this.props.counter);
       this.tick();
     }, 1000);
-    this.kuinterval = setInterval(() => {
+    this.kusamainterval = setInterval(() => {
       // console.log(this.state.elapsed, this.props.counter);
-      this.kutick();
+      this.kusamatick();
     }, 1000);
   }
   tick() {
@@ -72,12 +73,12 @@ class Router extends React.Component {
     }
   }
 
-  kutick() {
+  kusamatick() {
     // console.log("here " + this.props.start)
-    this.kuelapsed = new Date() - this.state.kustart;
+    this.kusamaelapsed = new Date() - this.state.kusamastart;
     // console.log('elapsed'+ this.elapsed)
-    if (this.state.kupreviousBlock !== undefined && this.kuelapsed > 3000) {
-      this.setState({ kupreviousBlock: undefined });
+    if (this.state.kusamapreviousBlock !== undefined && this.kusamaelapsed > 3000) {
+      this.setState({ kusamapreviousBlock: undefined });
     }
   }
 
@@ -96,15 +97,15 @@ class Router extends React.Component {
       // console.log(`block #${block.author}`);
       const lastAuthor = block.author.toString();
       if (this.ismounted) {
-        this.setState({ kulastAuthor: lastAuthor });
+        this.setState({ kusamalastAuthor: lastAuthor });
       }
       const start = new Date();
       const blockNumber = block.number.toString();
       if (this.ismounted) {
         this.setState({
-          kustart: start,
-          kufinalblock: blockNumber,
-          kupreviousBlock: blockNumber
+          kusamastart: start,
+          kusamafinalblock: blockNumber,
+          kusamapreviousBlock: blockNumber
         });
       }
     });
@@ -115,8 +116,8 @@ class Router extends React.Component {
       // console.log(sessionValidators)
       if (this.ismounted) {
         this.setState({
-          kuvalidators: sessionValidators,
-          kuisloading:false
+          kusamavalidators: sessionValidators,
+          kusamaisloading:false
         });
       }
     });
@@ -125,7 +126,7 @@ class Router extends React.Component {
       let arr1 = [];
       // console.log(JSON.stringify(valinfo))
       const validatorstotalinfo = await Promise.all(
-        this.state.kuvalidators.map(val => apinew.derive.staking.info(val))
+        this.state.kusamavalidators.map(val => apinew.derive.staking.info(val))
       );
 
       arr1 = JSON.parse(JSON.stringify(validatorstotalinfo)).map(info => {
@@ -145,8 +146,8 @@ class Router extends React.Component {
         // console.log("arr1",arr1)
         this.setState(
           {
-            kuvaltotalinfo: arr1,
-            kuisloading: false
+            kusamavaltotalinfo: arr1,
+            kusamaisloading: false
           }
           // () => this.getnominators2()
         );
@@ -155,7 +156,7 @@ class Router extends React.Component {
       // console.log("this", totalValidators.words["0"], totalValidators);
       if (this.ismounted) {
         this.setState({
-          kutotalValidators: totalValidators.words["0"]
+          kusamatotalValidators: totalValidators.words["0"]
         });
       }
     };
@@ -176,7 +177,7 @@ class Router extends React.Component {
       if (this.ismounted) {
         this.setState(
           {
-            kubottombarinfo: {
+            kusamabottombarinfo: {
               eraLength: eraLength,
               eraProgress: eraProgress,
               sessionLength: sessionLength,
@@ -192,7 +193,7 @@ class Router extends React.Component {
   // getnominators2 = async () => {
   //   let arr = [];
   //   // console.log("valtotal", this.state.valtotalinfo);
-  //   this.state.kuvaltotalinfo.forEach(ele => {
+  //   this.state.kusamavaltotalinfo.forEach(ele => {
   //     console.log(ele);
   //     ele.valinfo.stakers.others.forEach(nom => {
   //       arr.push(nom.who);
@@ -213,7 +214,7 @@ class Router extends React.Component {
 
   //   let arr2 = JSON.parse(JSON.stringify(nominatorstotalinfo));
   //   this.setState({
-  //     kunominatorinfo: arr2
+  //     kusamanominatorinfo: arr2
   //   });
   // };
 
@@ -298,7 +299,7 @@ class Router extends React.Component {
       let arr5 = [...arr1, ...arr4];
       console.log(arr4, arr5);
       // this.setState({
-      //   finalvalue:arr5
+      //   validatorsandintentions:arr5
       // })
       // const ans = await api.derive.staking.info("DdFp1EWazfocKdYuCinGyNCPAQRYr6LDkwURG7k9vQg51WS")
       // console.log(JSON.parse(JSON.stringify(ans)))
@@ -307,9 +308,10 @@ class Router extends React.Component {
         // console.log("arr1",arr1)
         this.setState(
           {
-            finalvalue: arr5,
+            validatorsandintentions: arr5,
             valtotalinfo: arr1,
-            intentions: arr3
+            intentions: arr3,
+            validatorandintentionloading:false
           },
           () => getnominators()
         );
@@ -379,19 +381,19 @@ class Router extends React.Component {
   render() {
     // console.count("hi")
     let loadingdone = false;
-    if (!this.state.isloading && !this.state.kuisloading) {
+    if (!this.state.isloading || !this.state.kusamaisloading) {
       loadingdone = true;
     }
-    // console.table(this.state.isloading,this.state.kuisloading,loadingdone)
+    // console.table(this.state.isloading,this.state.kusamaisloading,loadingdone)
     let bottombarobject = {
       bottombarinfo: this.state.bottombarinfo,
       finalblock: this.state.finalblock,
       validatorcount: this.state.totalValidators
     };
     let bottombarobject2 = {
-      bottombarinfo: this.state.kubottombarinfo,
-      finalblock: this.state.kufinalblock,
-      validatorcount: this.state.kutotalValidators
+      bottombarinfo: this.state.kusamabottombarinfo,
+      finalblock: this.state.kusamafinalblock,
+      validatorcount: this.state.kusamatotalValidators
     };
     return !loadingdone ? (
       <React.Fragment>
@@ -399,7 +401,6 @@ class Router extends React.Component {
           <div></div>
           <div></div>
         </div>
-        {/* <div className="lds-text">Waiting for API to be connected.....</div> */}
       </React.Fragment>
     ) : (
       <HashRouter>
@@ -418,15 +419,17 @@ class Router extends React.Component {
                 bottombarobject={bottombarobject}
                 nominatorinfo={this.state.nominatorinfo}
                 previousBlock={this.state.previousBlock}
-                kuvaltotalinfo={this.state.kuvaltotalinfo}
-                kucreateApi={this.createApi2}
-                kuvalidators={this.state.kuvalidators}
-                kustart={this.state.kustart}
-                kulastAuthor={this.state.kulastAuthor}
-                kuvalidatorcount={this.state.kutotalValidators}
-                kubottombarobject={bottombarobject2}
-                kunominatorinfo={this.state.kunominatorinfo}
-                kupreviousBlock={this.state.kupreviousBlock}
+                isloading={this.state.isloading}
+                kusamavaltotalinfo={this.state.kusamavaltotalinfo}
+                kusamacreateApi={this.createApi2}
+                kusamavalidators={this.state.kusamavalidators}
+                kusamastart={this.state.kusamastart}
+                kusamalastAuthor={this.state.kusamalastAuthor}
+                kusamavalidatorcount={this.state.kusamatotalValidators}
+                kusamabottombarobject={bottombarobject2}
+                kusamanominatorinfo={this.state.kusamanominatorinfo}
+                kusamapreviousBlock={this.state.kusamapreviousBlock}
+                kusamaisloading = {this.state.kusamaisloading}
               />
             )}
           />
@@ -445,7 +448,7 @@ class Router extends React.Component {
                 nominatorinfo={this.state.nominatorinfo}
                 previousBlock={this.state.previousBlock}
                 intentions={this.state.intentions}
-                finalvalue={this.state.finalvalue}
+                validatorsandintentions={this.state.validatorsandintentions}
               />
             )}
           />
@@ -454,15 +457,15 @@ class Router extends React.Component {
             path="/kusama"
             render={props => (
               <KusamaApp
-                valtotalinfo={this.state.kuvaltotalinfo}
+                valtotalinfo={this.state.kusamavaltotalinfo}
                 createApi={this.createApi2}
-                validators={this.state.kuvalidators}
-                start={this.state.kustart}
-                lastAuthor={this.state.kulastAuthor}
-                validatorcount={this.state.kutotalValidators}
+                validators={this.state.kusamavalidators}
+                start={this.state.kusamastart}
+                lastAuthor={this.state.kusamalastAuthor}
+                validatorcount={this.state.kusamatotalValidators}
                 bottombarobject={bottombarobject2}
-                nominatorinfo={this.state.kunominatorinfo}
-                previousBlock={this.state.kupreviousBlock}
+                nominatorinfo={this.state.kusamanominatorinfo}
+                previousBlock={this.state.kusamapreviousBlock}
               />
             )}
           />
@@ -470,7 +473,12 @@ class Router extends React.Component {
             exact
             path="/alexander/validator/:validatorAddress"
             render={props => (
-              <ValidatorApp valtotalinfo={this.state.valtotalinfo} />
+              <ValidatorApp 
+                valtotalinfo={this.state.valtotalinfo}
+                intentions={this.state.intentions}
+                validatorsandintentions = {this.state.validatorsandintentions}
+                validatorandintentionloading = {this.state.validatorandintentionloading}
+                />
             )}
           />
           <Route
@@ -480,6 +488,10 @@ class Router extends React.Component {
               <NominatorApp
                 valtotalinfo={this.state.valtotalinfo}
                 nominatorinfo={this.state.nominatorinfo}
+                intentions={this.state.intentions}
+                validatorsandintentions = {this.state.validatorsandintentions}
+                validatorandintentionloading = {this.state.validatorandintentionloading}
+
               />
             )}
           />
