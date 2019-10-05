@@ -232,14 +232,30 @@ body {
   width: 300px;
   height: 200px;
   overflow: auto;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
   z-index: 1;
   top:100px;
   right: 100px;
   color: white;
   font-size: 14px;
   line-height: 26px;
+  scrollbar-color: blue red;
+  scrollbar-width: thin;
 }
+
+.intentions::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+.intentions::-webkit-scrollbar-track-piece  {
+  background-color: #C2D2E4;
+}
+
+.intentions::-webkit-scrollbar-thumb:vertical {
+  height: 30px;
+  background-color: #0A4C95;
+}
+
 .valsign{
   width: 15px;
   height: 8px;

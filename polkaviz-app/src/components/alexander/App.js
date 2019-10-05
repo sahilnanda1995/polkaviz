@@ -9,104 +9,15 @@ import { withRouter } from 'react-router-dom';
 // import Parachains from './Parachains'
 
 class App extends React.Component {
-  // constructor() {
-  //   super();
-  //   this.latestBlockAuthor = undefined;
-  //   this.state = {
-  //     validators: [],
-  //     lastAuthor: "",
-  //     start: null,
-  //     isloading:true,
-  //     valtotalinfo:[]
-  //   };
-  //   this.ismounted = true
-  // }
-
-
-  componentDidMount() {
-    // if(!this.props.valtotalinfo){
-    // this.props.createApi();
-    // }
-  }
-
-  // async createApi() {
-  //   const provider = new WsProvider("wss://poc3-rpc.polkadot.io");
-  //   const api = await ApiPromise.create(provider);
-  //   await api.derive.chain.subscribeNewHead(block => {
-  //     // console.log(`block #${block.author}`);
-  //     const lastAuthor = block.author.toString();
-  //     if(this.ismounted){
-  //     this.setState({ lastAuthor });
-  //     }
-  //     const start = new Date();
-  //     if(this.ismounted){
-  //     this.setState({ start: start });
-  //     }
-  //   });
-
-  //   await api.query.session.validators(validators => {
-  //     const sessionValidators = validators.map(x => x.toString());
-  //     if(this.ismounted){
-  //     this.setState({ 
-  //       validators: sessionValidators       
-  //      });
-  //     }
-  //   });
-
-
-
-
-
-  //   async function asyncForEach(array, callback) {
-  //     for (let index = 0; index < array.length; index++) {
-  //       await callback(array[index], index, array);
-  //     }
-  //   }
-  //   const start = async () => {
-  //     let arr1 =[]
-  //     let count =0
-  //     await asyncForEach(this.props.validators, async (val) => {
-  //       console.log(val,count++)
-  //       let stakers = await api.derive.staking.info(val)
-  //       let stakeinfo = JSON.parse(stakers)
-  //       console.log(stakeinfo.stakers.others)
-  //       arr1.push({
-  //         valname:val,
-  //         valinfo:stakeinfo
-  //         })
-  //       // stakeinfo.stakers.others.forEach(ele => {
-  //       //   if(ele.who === this.props.match.params.nominatorAddress)
-  //       //   {
-  //       //     arr1.push(val)
-  //       //     bonded += ele.value /Math.pow(10,15)
-  //       //   }
-  //       // })
-  //     });
-  //     console.log('Done');
-  //     console.log(arr1)
-  //     this.setState({
-  //       valtotalinfo:arr1,
-  //       isloading: false
-  //     })
-  //   }
-  //   start();
-    
-
-
-
-
-
-  
-  // componentWillUnmount(){
-  //   this.ismounted = false;
-  // }
-
+  shouldComponentUpdate(nextProps, nextState){
+    return this.props.lastAuthor !== nextProps.lastAuthor || this.props.bottombarobject !== nextProps.bottombarobject
+}
   render() {
     const arr = this.props.finalvalue;
     // console.log(arr)
     const intentionsarr = this.props.intentions
     console.log(this.props.finalvalue)
-
+    console.log(this.props.lastAuthor,this.props.validators,this.props.valtotalinfo)
     console.log(this.props.validators.indexOf(this.props.lastAuthor))
     // const validatortext = "Validators: " + this.props.validators.length + "/" + this.props.totalvalidators
     // const arr1 = [1,2,3,4,5,6,7,8]
@@ -121,14 +32,16 @@ class App extends React.Component {
 
         <div className="intentions">
           <div>Next Up:</div>
-          {intentionsarr.map((ele,index) => {
+          {intentionsarr.length === 0 ? <div className="inten">no addresses found</div> :
+          intentionsarr.map((ele,index) => {
             return (
             <div className="inten" key={index}>
               <span className="valsign"></span>
               {ele.toString().slice(0,8) + "......" + ele.toString().slice(-8)}
             </div>
             )
-          })}
+          })
+          }
         </div>
 
         <div className="relay-circle">
